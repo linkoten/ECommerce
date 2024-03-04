@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import { Product } from '@prisma/client';
 import Link from 'next/link';
