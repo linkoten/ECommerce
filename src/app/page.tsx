@@ -1,3 +1,5 @@
+"use server"
+
 import ProductCard from '@/components/ProductCard';
 import { LoginButton } from '@/components/auth/LoginButtons';
 
