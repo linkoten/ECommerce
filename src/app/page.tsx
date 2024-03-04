@@ -1,15 +1,14 @@
-
 import ProductCard from '@/components/ProductCard';
 import { LoginButton } from '@/components/auth/LoginButtons';
 
 import { User } from '@/components/auth/User';
 import { getAuthSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { getProducts } from './actions/findProducts';
 
 export default async function Home() {
-    const  {products}  = await getProducts();
-
+    const products = await prisma.product.findMany({
+        orderBy: { id: 'desc' },
+    });
 
     const session = await getAuthSession();
 
@@ -19,15 +18,14 @@ export default async function Home() {
     return (
         <>
             <div
-                className='my-4 px-8
+                className='my-4
      grid grid-cols-1 md:grid-cols2 xl:grid-cols-3 gap-8'
             >
-                {products?.slice(0).map((product) => (
+                {products.slice(0).map((product) => (
                     <ProductCard key={product.id} product={product} />
                 ))}
             </div>
 
-            <LoginButton />
         </>
     );
 }
