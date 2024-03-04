@@ -1,4 +1,3 @@
-'use client'
 import CreateProduct from "../../components/Create/createProduct";
 
 
