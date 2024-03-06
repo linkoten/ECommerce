@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import EmailProvider from 'next-auth/providers/email';
+import { mergeAnonymousCartIntoUserCart } from '@/lib/cart';
 
 const githubID = process.env.GITHUB_ID;
 const githubSecret = process.env.GITHUB_SECRET;
@@ -52,6 +53,11 @@ export const authConfig = {
                 session.user.id = user.id;
             }
             return session;
+        },
+    },
+    events: {
+        async signIn({user}) {
+            await mergeAnonymousCartIntoUserCart(user.id);
         },
     },
 
