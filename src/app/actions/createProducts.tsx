@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { Color, Size } from "@prisma/client";
+import { put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -22,16 +23,20 @@ const productSchema = z.object({
     quantity: z.coerce.number(),
   sizes: z.nativeEnum(Size), // Ajoutez cette ligne pour valider l'enum Size
    colors: z.nativeEnum(Color),
-   photos: z.object({
-    height: z.number().default(200),
-    width: z.number().default(100),
-    url: z.string().default("D:\Prog\E-Commerce Shop\my-app\public\next.svg"),
-  }),
+   photos: z.string().default("lol"),
 
     
   });
   
 export  async function createProducts(formData: FormData) {
+
+  const photos = formData.get('photos') as File;
+  const photosname = photos.name;
+
+  try {
+    const blob = await put(photosname, photos, { access: 'public' });
+    const photoUrl = blob.url;
+
 
 
   const validatedFields = productSchema.safeParse({
@@ -45,7 +50,6 @@ export  async function createProducts(formData: FormData) {
         quantity: formData.get("quantity"),
        sizes: formData.get("size"),
        colors: formData.get("color"),
-       photos: formData.get("photos")
 
   
   })
@@ -58,7 +62,7 @@ export  async function createProducts(formData: FormData) {
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
-  const {  name, url, description, price, quantity, colors, sizes, photos } = validatedFields.data;
+  const {  name, url, description, price, quantity, colors, sizes } = validatedFields.data;
 
 
   await prisma.product.create({
@@ -70,13 +74,16 @@ export  async function createProducts(formData: FormData) {
       quantity: quantity,
      colors: [colors],
       sizes: [sizes],
-      photos: photos,
+      photos: photoUrl
 
 
     },
   });
 
   revalidatePath("/createProduct");
+  return { success: true }; // Or any other relevant response
+} catch (error) {
+  console.error(error);
+  return { error: 'Something went wrong' }; // Handle errors as needed
 }
-
-
+}

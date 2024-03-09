@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation';
 import React, { cache } from 'react';
 import AddToCartButton from './AddToCartButton';
 import { incrementProductQuantity } from './action';
+import PriceTag from '@/components/PriceTag';
+import { Badge } from '@/components/ui/badge';
 
 interface ProductPageProps {
     params: {
@@ -26,9 +28,9 @@ export async function generateMetadata({
     const product = await getProduct(id);
 
     return {
-        title: product.name + " - Ecommerce",
-        description: product.description
-    }
+        title: product.name + ' - Ecommerce',
+        description: product.description,
+    };
 }
 
 export default async function ProductPage({
@@ -37,20 +39,30 @@ export default async function ProductPage({
     const product = await getProduct(id);
 
     return (
-        <div className='fle flex-col lg:flex-row gap-4 lg:items-center'>
-            <Image
-                src={product.name}
-                alt={product.name}
-                width={500}
-                height={500}
-                className='rounded-lg'
-                priority
-            />
+        <div className='flex flex-col lg:flex-row gap-4 lg:items-center'>
+            {product.photos && (
+                <img
+                    src={product.photos}
+                    alt={product.name}
+                    width={500}
+                    height={500}
+                    className='rounded-lg'
+                />
+            )}
             <div>
                 <h1 className='text-5xl font-bold'>{product.name}</h1>
-                <p className='mt-4'>{product.price}</p>
-                <p className='py-6'>{product.description}</p>
-                <AddToCartButton productId={product.id} incrementProductQuantity={incrementProductQuantity} />
+                <div className='space-x-8'>
+                <PriceTag price={product.price}  />  
+                <Badge>Stock : {product.quantity}</Badge>    
+                </div>         
+                 <p className='py-6'>{product.description}</p>
+
+                <AddToCartButton
+                    productId={product.id}
+                    incrementProductQuantity={
+                        incrementProductQuantity
+                    }
+                />
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-'use server'
+'use server';
 import ProductCard from '@/components/ProductCard';
 import { LoginButton } from '@/components/auth/LoginButtons';
 
@@ -13,21 +13,16 @@ export default async function Home() {
 
     const session = await getAuthSession();
 
-    if (session) {
-        return <User />;
-    }
+    
     return (
-        <>
+        <div className=' bg-slate-300'>
             <div
-                className='my-4
-     grid grid-cols-1 md:grid-cols2 xl:grid-cols-3 gap-8'
+                className='my-4 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-8 p-8'
             >
                 {products.slice(0).map((product) => (
                     <ProductCard key={product.id} product={product} />
                 ))}
             </div>
-
-        </>
+        </div>
     );
 }
-
