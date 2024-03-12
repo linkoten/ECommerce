@@ -3,6 +3,7 @@
 import { Select } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CartItemWithProduct } from '@/lib/cart';
+import { formatPrice } from '@/lib/format';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useTransition } from 'react';
@@ -32,8 +33,8 @@ export default function CartEntry({
     return (
         <div>
             <div className='flex flex-wrap items-center gap-3'>
-                <Image
-                    src={product.name}
+                <img
+                    src={product.photos || ""}
                     alt={product.name}
                     width={200}
                     height={200}
@@ -46,7 +47,7 @@ export default function CartEntry({
                     >
                         {product.name}
                     </Link>
-                    <div>Price : {product.price}</div>
+                    <div>Price: {formatPrice(product.price)}</div>
                     <div className='my-1 flex items-center gap-2'>
                         Quantity:
                         <select
@@ -68,7 +69,7 @@ export default function CartEntry({
                         </select>
                     </div>
                     <div className='flex items-center gap-3'>
-                        Total : {product.price * quantity}
+                    {formatPrice(product.price * quantity)}
                         {isPending && <Skeleton />}
                     </div>
                 </div>

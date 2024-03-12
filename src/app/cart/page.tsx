@@ -3,6 +3,7 @@ import React from 'react';
 import CartEntry from './CartEntry';
 import { setProductQuantity } from './actions';
 import { Button } from '@/components/ui/button';
+import { formatPrice } from '@/lib/format';
 
 export const metadata = {
     title: "Your Cart - ECommerce"
@@ -18,9 +19,9 @@ export default async function CartPage() {
             ))}
             {!cart?.cartItems.length && <p>Your cart is empty.</p>}
             <div className='flex flex-col items-end sm:items-center'>
-                <p className='mb-3 font-bold'>
-                    Total: {cart?.subtotal || 0}
-                </p>
+                <div className='mb-3 font-bold'>
+                Total: {formatPrice(cart?.subtotal || 0)}
+                </div>
                 <Button>
                     Checkout
                 </Button>

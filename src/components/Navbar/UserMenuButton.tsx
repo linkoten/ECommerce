@@ -6,10 +6,13 @@ import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
+import anonymousPhoto from '../../../public/téléchargement.jpg'
 
 interface UserMenuButtonProps {
     session: Session | null;
 }
+
+
 
 export default function UserMenuButton({
     session,
@@ -22,7 +25,7 @@ export default function UserMenuButton({
                 <Avatar>
                     {user ? (
                         <AvatarImage
-                            src={user?.image || 'Pas de Photos'}
+                            src={user?.image || ''}
                             alt='Profile picture'
                             width={40}
                             height={40}
@@ -43,7 +46,7 @@ export default function UserMenuButton({
                             />
                         </svg>
                     )}
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>?</AvatarFallback>
                 </Avatar>
             </Label>
             
